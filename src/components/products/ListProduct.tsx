@@ -34,6 +34,7 @@ const columns: ColumnsType<DataType> = [
         title: 'Edit',
         dataIndex: 'address',
         className: 'border-r border-solid border-[#f0f0f0]',
+        onCell: (record) =>{ return { colSpan: 2 } },
     },
 ];
 
