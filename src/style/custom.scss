@@ -1,0 +1,32 @@
+.ant-layout-sider {
+  flex: 0 0 250px !important;
+  min-width: 250px !important;
+  max-width: 250px !important;
+  width: 250px !important;
+}
+
+.ant-layout-sider-collapsed {
+  flex: 0 0 80px !important;
+  max-width: 80px !important;
+  min-width: 80px !important;
+  width: 80px !important;
+}
+
+.ant-table-cell.ant-table-selection-column {
+  padding: 0 30px !important;
+  border-right: 1px solid  #f0f0f0;
+}
+
+// none border-radius row top 
+:where(.css-dev-only-do-not-override-acm2ia).ant-table-wrapper .ant-table-container table>thead>tr:first-child >*:last-child {
+  border-radius: 0;
+}
+:where(.css-dev-only-do-not-override-acm2ia).ant-table-wrapper .ant-table-container table>thead>tr:first-child >*:first-child {
+  border-radius:  0;
+}
+:where(.css-dev-only-do-not-override-acm2ia).ant-table-wrapper .ant-table:not(.ant-table-bordered) .ant-table-tbody>tr.ant-table-row:hover>td:first-child, :where(.css-dev-only-do-not-override-acm2ia).ant-table-wrapper .ant-table:not(.ant-table-bordered) .ant-table-tbody>tr >td.ant-table-cell-row-hover:first-child, :where(.css-dev-only-do-not-override-acm2ia).ant-table-wrapper .ant-table:not(.ant-table-bordered) .ant-table-tbody>tr.ant-table-row.ant-table-row-selected>td:first-child {
+  border-radius: 0;
+}
+:where(.css-dev-only-do-not-override-acm2ia).ant-table-wrapper .ant-table:not(.ant-table-bordered) .ant-table-tbody>tr.ant-table-row:hover>td:last-child, :where(.css-dev-only-do-not-override-acm2ia).ant-table-wrapper .ant-table:not(.ant-table-bordered) .ant-table-tbody>tr >td.ant-table-cell-row-hover:last-child, :where(.css-dev-only-do-not-override-acm2ia).ant-table-wrapper .ant-table:not(.ant-table-bordered) .ant-table-tbody>tr.ant-table-row.ant-table-row-selected>td:last-child {
+  border-radius: 0;
+}
