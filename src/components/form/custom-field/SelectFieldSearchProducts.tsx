@@ -18,8 +18,11 @@ const SelectFieldSearchProducts: React.FC<Props> = ({
     field, form
 }) => {
     const { name, value, onChange, onBlur } = field;
-    let selectedOption = options.find((option: any) => option.value === value);
+    const {errors, touched} = form;
 
+    const showError = errors[name] && touched[name];
+    
+    let selectedOption = options.find((option: any) => option.value === value);
     const handlSelectedOptionChange = (selectedOption: any) => {
         const selectValue = selectedOption ? selectedOption.value : selectedOption;
         form.setFieldValue(name, selectValue);
@@ -27,18 +30,21 @@ const SelectFieldSearchProducts: React.FC<Props> = ({
 
     return (
         <div className={classNameContainer}>
-            <label htmlFor="" className="min-w-[150px] text-right">{label}</label>
-            <Select className={className}
-                id={name}
-                name={name}
-                {...field}
-                onChange={handlSelectedOptionChange}
+            <label htmlFor={name} className="min-w-[150px] text-right">{label}</label>
+            <div className="flex-1">
+                <Select className={className}
+                    id={name}
+                    name={name}
+                    {...field}
+                    onChange={handlSelectedOptionChange}
 
-                value={selectedOption}
-                placeholder={placeholder}
-                options={options}
-            >
-            </Select>
+                    value={selectedOption}
+                    placeholder={placeholder}
+                    options={options}
+                >
+                </Select>
+                <p className="text-sm text-[#ff7600] min-h-[20px] ml-4 text-left">{showError && errors[name]}</p>
+            </div>
         </div>
     );
 };

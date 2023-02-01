@@ -11,7 +11,7 @@ const ProductsTemplate: React.FC<Props> = ({
 
 }) => {
     return (
-        <section className="text-size-2">
+        <section className="">
             <div className="flex items-center justify-between">
                 <p className="text-size-7">Products</p>
                 <div className="text-white flex gap-1">

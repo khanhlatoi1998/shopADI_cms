@@ -34,7 +34,7 @@ const Login = () => {
                         return (
                             <Form>
                                 <FastField
-                                    label="username"
+                                    // label="username"
                                     name="username"
                                     type="text"
                                     className="w-full border-b border-solid border-white py-2 pr-4 bg-transparent text-white"
@@ -46,7 +46,7 @@ const Login = () => {
                                 >
                                 </FastField>
                                 <FastField
-                                    label="password"
+                                    // label="password"
                                     name="password"
                                     type="text"
                                     className="w-full border-b border-solid border-white py-2 pr-4 bg-transparent text-white"

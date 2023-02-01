@@ -1,4 +1,6 @@
 import { FastField, Form, Formik } from "formik";
+import * as yup from 'yup';
+
 import { CATEGORY_OPTIONS, PRICE_OPTIONS } from "../../../common/select";
 import ListProduct from "../../products/ListProduct";
 import InputFieldSearchProduct from "../custom-field/InputFieldSearchProducts";
@@ -7,7 +9,7 @@ import SelectFieldSearchProducts from "../custom-field/SelectFieldSearchProducts
 const SearchProducts = () => {
 
     const initialValues = {
-        product: '',
+        searchProduct_name: '',
         product_category: '',
         product_createdDate: '',
         product_price: '',
@@ -17,6 +19,9 @@ const SearchProducts = () => {
         console.log(value);
     };
 
+    const validationSchema = yup.object().shape({
+        searchProduct_name: yup.string().required('vui lòng nhập thông tin'),
+    });
 
     return (
         <div className="flex flex-col gap-4">
@@ -30,26 +35,27 @@ const SearchProducts = () => {
                 <Formik
                     initialValues={initialValues}
                     onSubmit={(value) => onSubmit(value)}
+                    validationSchema={validationSchema}
                 >
                     {formikProps => {
                         const { values } = formikProps;
                         return (
                             <Form className="">
-                                <div className="mt-4 grid lg:grid-cols-2 grid-cols-1 gap-y-2">
+                                <div className="mt-4 grid lg:grid-cols-2 grid-cols-1 gap-y-1">
                                     <FastField
                                         label="Product name"
-                                        name="product"
-                                        className="border border-gray-300 flex-1 py-1 px-3 max-w-[300px]"
-                                        classNameContainer="flex items-center gap-4"
+                                        name="searchProduct_name"
+                                        className="border border-gray-300 flex-1 py-1 px-3 w-full"
+                                        classNameContainer="flex gap-4"
                                         type="text"
                                         component={InputFieldSearchProduct}
                                     >
                                     </FastField>
                                     <FastField
                                         label="Category"
-                                        name="product_category"
-                                        className="border border-gray-300 flex-1 max-w-[300px]"
-                                        classNameContainer="flex items-center gap-4"
+                                        name="searchProduct_category"
+                                        className="border border-gray-300 flex-1 w-full"
+                                        classNameContainer="flex gap-4"
                                         placeholder="All"
 
                                         options={CATEGORY_OPTIONS}
@@ -58,9 +64,9 @@ const SearchProducts = () => {
                                     </FastField>
                                     <FastField
                                         label="Price"
-                                        name="product_price"
-                                        className="border border-gray-300 flex-1 max-w-[300px]"
-                                        classNameContainer="flex items-center gap-4"
+                                        name="searchProduct_price"
+                                        className="border border-gray-300 flex-1 w-full"
+                                        classNameContainer="flex gap-4"
                                         placeholder="All"
 
                                         options={PRICE_OPTIONS}
@@ -69,9 +75,9 @@ const SearchProducts = () => {
                                     </FastField>
                                     <FastField
                                         label="Created Date"
-                                        name="product_createdDate"
-                                        className="border border-gray-300 flex-1 py-1 px-3 max-w-[300px]"
-                                        classNameContainer="flex items-center gap-4"
+                                        name="searchProduct_createDate"
+                                        className="border border-gray-300 flex-1 py-1 px-3 w-full"
+                                        classNameContainer="flex gap-4"
                                         type="text"
                                         component={InputFieldSearchProduct}
                                     >

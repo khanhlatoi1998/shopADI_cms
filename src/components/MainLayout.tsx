@@ -133,11 +133,14 @@ const MainLayout: React.FC<Props> = ({
                     </div>
                 </Header>
                 <Content
+                className="text-size-4"
                     style={{
                         padding: 18,
                         minHeight: 280,
                         backgroundColor: '#EAEEF3',
+                        // fontSize: '18px'
                     }}>
+                        
                     <Outlet />
                 </Content>
             </Layout>

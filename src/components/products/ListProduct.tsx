@@ -34,7 +34,9 @@ const columns: ColumnsType<DataType> = [
         title: 'Edit',
         dataIndex: 'address',
         className: 'border-r border-solid border-[#f0f0f0]',
-        onCell: (record) =>{ return { colSpan: 2 } },
+        render: text => <div className="flex ">
+            <button onClick={() => console.log(text)} className="border border-solid border-gray-300 py-2 px-3 rounded-md mx-auto block"><i className="fa-solid fa-pencil mr-2"></i>Edit</button>
+        </div>
     },
 ];
 
@@ -63,7 +65,7 @@ const ListProduct = () => {
     };
 
     return (
-        <div>
+        <div className="text-size-4">
             <p>List Product</p>
             <div className="border border-solid border-[#f0f0f0] mt-6">
                 <Table

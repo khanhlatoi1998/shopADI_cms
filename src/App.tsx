@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom';
 import ProductsTemplate from "./pages/products-template";
 import Dashboard from "./pages/dashboard";
+import AddProduct from "./components/products/AddProduct";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/admin" element={<MainLayout />} >
             <Route index element={<Dashboard />} />
             <Route path="products" element={<ProductsTemplate />} />
+            <Route path="products/create" element={<AddProduct />} />
           </Route>
         </Routes>
       </Router>
