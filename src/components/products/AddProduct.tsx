@@ -1,6 +1,6 @@
 import { FastField, Form, Formik } from "formik";
 import * as yup from 'yup';
-
+import uuid from 'react-uuid';
 
 import InputFieldSearchProduct from "../form/custom-field/InputFieldSearchProducts";
 import SelectFieldSearchProducts from "../form/custom-field/SelectFieldSearchProducts";
@@ -9,33 +9,40 @@ import { CATEGORY_OPTIONS } from "../../common/select";
 import InputField from "../form/custom-field/InputField";
 import InputFilesField from "../form/custom-field/InputFilesField";
 import productsApi from "../../api/productsApi";
+import InputFieldColor from "../form/custom-field/InputFieldColor";
 
 const AddProduct = () => {
     const initialValues = {
-        addProduct_name: "", 
-        addProduct_category: "", 
-        addProduct_slug: "", 
-        addProduct_price: "", 
-        addProduct_oldPrice: "", 
-        addProduct_color: "", 
-        addProduct_description: "", 
-        addProduct_image: "",
-        AddProduct_listImage: []
+        product_name: "", 
+        product_category: "", 
+        product_slug: "", 
+        product_price: "", 
+        product_oldPrice: "", 
+        product_color: "", 
+        product_listColor: [],
+        product_description: "", 
+        product_image: "",
+        product_listImage: [],
+        size: ['S', 'M', 'L', 'X'],
+        quanlity: 1,
     };
 
     const validationSchema = yup.object().shape({
-        addProduct_name: yup.string().required('vui lòng nhập thông tin'), 
-        addProduct_category: yup.string().required('vui lòng nhập thông tin'), 
-        addProduct_slug: yup.string().required('vui lòng nhập thông tin'), 
-        addProduct_price: yup.string().required('vui lòng nhập thông tin'), 
-        addProduct_oldPrice: yup.string().required('vui lòng nhập thông tin'), 
-        addProduct_color: yup.string().required('vui lòng nhập thông tin'), 
-        addProduct_image: yup.string().required('vui lòng nhập thông tin'), 
-        // addProduct_subImage: yup.string().required('vui lòng nhập thông tin'), 
-        addProduct_description: yup.string(), 
+        product_name: yup.string().required('vui lòng nhập thông tin'), 
+        product_category: yup.string().required('vui lòng nhập thông tin'), 
+        product_slug: yup.string().required('vui lòng nhập thông tin'), 
+        product_price: yup.number().typeError('vui lòng nhập số').required('vui lòng nhập thông tin'), 
+        product_oldPrice: yup.number().typeError('vui lòng nhập số').required('vui lòng nhập thông tin'), 
+        product_color: yup.string().required('vui lòng nhập thông tin'), 
+        product_image: yup.string().required('vui lòng nhập thông tin'), 
+        // product_subImage: yup.string().required('vui lòng nhập thông tin'), 
+        product_description: yup.string(), 
     });
 
     const onSubmit = (value: any) => {
+        delete value.product_image;
+        delete value.product_color;
+        value.product_slug += `-${Math.floor(Math.random() * 10000000)}`; 
         console.log('submit', value);
         productsApi.createItem(value);
     };
@@ -64,7 +71,7 @@ const AddProduct = () => {
                                     <div className="mt-4 flex flex-col gap-2">
                                         <FastField
                                             label="Product name"
-                                            name="addProduct_name"
+                                            name="product_name"
                                             className="border border-gray-300 flex-1 py-1 px-3 max-w-[352px] min-w-[452px]"
                                             classNameContainer="flex justify-center gap-4 mx-auto"
                                             classNameLabel="min-w-[150px] text-right mt-1"
@@ -73,7 +80,7 @@ const AddProduct = () => {
                                         ></FastField>
                                         <FastField
                                             label="Category"
-                                            name="addProduct_category"
+                                            name="product_category"
                                             className="border border-gray-300 flex-1 max-w-[500px] min-w-[452px]"
                                             classNameContainer="flex justify-center gap-4 mx-auto"
                                             classNameLabel="min-w-[150px] text-right mt-1"
@@ -83,7 +90,7 @@ const AddProduct = () => {
                                         ></FastField>
                                         <FastField
                                             label="Slug"
-                                            name="addProduct_slug"
+                                            name="product_slug"
                                             className="border border-gray-300 flex-1 py-1 px-3 max-w-[352px] min-w-[452px]"
                                             classNameContainer="flex justify-center gap-4 mx-auto"
                                             classNameLabel="min-w-[150px] text-right mt-1"
@@ -92,7 +99,7 @@ const AddProduct = () => {
                                         ></FastField>
                                         <FastField
                                             label="Price"
-                                            name="addProduct_price"
+                                            name="product_price"
                                             className="border border-gray-300 flex-1 py-1 px-3 max-w-[352px] min-w-[452px]"
                                             classNameContainer="flex justify-center gap-4 mx-auto"
                                             classNameLabel="min-w-[150px] text-right mt-1"
@@ -101,7 +108,7 @@ const AddProduct = () => {
                                         ></FastField>
                                         <FastField
                                             label="Old price"
-                                            name="addProduct_oldPrice"
+                                            name="product_oldPrice"
                                             className="border border-gray-300 flex-1 py-1 px-3 max-w-[352px] min-w-[452px]"
                                             classNameContainer="flex justify-center gap-4 mx-auto"
                                             classNameLabel="min-w-[150px] text-right mt-1"
@@ -110,16 +117,16 @@ const AddProduct = () => {
                                         ></FastField>
                                         <FastField
                                             label="Color"
-                                            name="addProduct_color"
+                                            name="product_color"
                                             className="border border-gray-300 flex-1 max-w-[352px] min-w-[452px] h-[40px]"
                                             classNameContainer="flex justify-center gap-4 mx-auto"
                                             classNameLabel="min-w-[150px] text-right"
                                             type="color"
-                                            component={InputField}
+                                            component={InputFieldColor}
                                         ></FastField>
                                         <FastField
                                             label="Image"
-                                            name="addProduct_image"
+                                            name="product_image"
                                             className="border border-gray-300 flex-1 py-1 px-3 max-w-[352px] min-w-[452px]"
                                             classNameContainer="flex justify-center gap-4 mx-auto"
                                             classNameLabel="min-w-[150px] text-right mt-1"
@@ -132,7 +139,7 @@ const AddProduct = () => {
                                         ></FastField>
                                         <FastField
                                             label="Description"
-                                            name="addProduct_description"
+                                            name="product_description"
                                             className="border border-gray-300 flex-1 px-3 py-1 max-w-[352px] min-w-[452px] min-h-[12px]"
                                             classNameContainer="flex justify-center gap-4 mx-auto"
                                             classNameLabel="min-w-[150px] text-right"
