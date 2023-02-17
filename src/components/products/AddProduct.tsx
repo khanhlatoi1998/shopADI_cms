@@ -1,6 +1,8 @@
 import { FastField, Form, Formik } from "formik";
 import * as yup from 'yup';
 import uuid from 'react-uuid';
+import { ref, getDownloadURL, uploadBytesResumable, uploadString } from "firebase/storage";
+import storage from "../../config/firebase/firebase";
 
 import InputFieldSearchProduct from "../form/custom-field/InputFieldSearchProducts";
 import SelectFieldSearchProducts from "../form/custom-field/SelectFieldSearchProducts";
@@ -10,41 +12,71 @@ import InputField from "../form/custom-field/InputField";
 import InputFilesField from "../form/custom-field/InputFilesField";
 import productsApi from "../../api/productsApi";
 import InputFieldColor from "../form/custom-field/InputFieldColor";
+import { SIZE_OPTION } from "../../common/size";
+import { ProductType } from "../../contant";
 
 const AddProduct = () => {
-    const initialValues = {
-        product_name: "", 
-        product_category: "", 
-        product_slug: "", 
-        product_price: "", 
-        product_oldPrice: "", 
-        product_color: "", 
-        product_listColor: [],
-        product_description: "", 
-        product_image: "",
-        product_listImage: [],
-        size: ['S', 'M', 'L', 'X'],
-        quanlity: 1,
+    const initialValues: ProductType = {
+        image: '',
+        subImage: [],
+        name: '',
+        category: '',
+        color_group: [],
+        size_group: SIZE_OPTION,
+        color: '',
+        size: '',
+        slug: '',
+        price: '',
+        oldPrice: '',
+        quantity: 1,
+        rating: '',
+        type: '',
+        like: 0,
+        view: 0,
+        share: 0,
+        comment: [],
+        description: '',
     };
 
     const validationSchema = yup.object().shape({
-        product_name: yup.string().required('vui lòng nhập thông tin'), 
-        product_category: yup.string().required('vui lòng nhập thông tin'), 
-        product_slug: yup.string().required('vui lòng nhập thông tin'), 
-        product_price: yup.number().typeError('vui lòng nhập số').required('vui lòng nhập thông tin'), 
-        product_oldPrice: yup.number().typeError('vui lòng nhập số').required('vui lòng nhập thông tin'), 
-        product_color: yup.string().required('vui lòng nhập thông tin'), 
-        product_image: yup.string().required('vui lòng nhập thông tin'), 
-        // product_subImage: yup.string().required('vui lòng nhập thông tin'), 
-        product_description: yup.string(), 
+        name: yup.string().required('vui lòng nhập thông tin'),
+        category: yup.string().required('vui lòng nhập thông tin'),
+        slug: yup.string().required('vui lòng nhập thông tin'),
+        price: yup.number().typeError('vui lòng nhập số').required('vui lòng nhập thông tin'),
+        oldPrice: yup.number().typeError('vui lòng nhập số').required('vui lòng nhập thông tin'),
+        color: yup.string().required('vui lòng nhập thông tin'),
+        image: yup.string().required('vui lòng nhập thông tin'),
+        description: yup.string(),
     });
 
-    const onSubmit = (value: any) => {
-        delete value.product_image;
-        delete value.product_color;
-        value.product_slug += `-${Math.floor(Math.random() * 10000000)}`; 
-        console.log('submit', value);
-        productsApi.createItem(value);
+    const onSubmit = (value: ProductType, setFieldValue: any) => {
+        value.slug += `-${Math.floor(Math.random() * 10000000)}`;
+        const handleListImage = [...value.subImage];
+        // value.subImage = [];
+        console.log(handleListImage);
+        if (true) {
+            const handleListImage = () => {
+                const newListImage = value.subImage.map(async (item, idx) => {
+                    const name = uuid();
+                    const storageRef = ref(storage, `Products-Image/${name}`) // path save in firebase
+                    await uploadString(storageRef, item, 'data_url').then(async (snapshot: any) => {
+                        await getDownloadURL(snapshot.ref).then((url) => {
+                            value.subImage[idx] = url;
+                            if (idx === 0) {
+                                value.image = url;
+                            }
+                        });
+                    });
+                    return value;
+                });
+                return Promise.all(newListImage);
+            };
+            handleListImage().then((result: any) => {
+                console.log(value); 
+                productsApi.createItem(value);
+                // value.subImage = [];
+            }).catch((err) => {console.log(err)})
+        }
     };
 
     return (
@@ -56,8 +88,7 @@ const AddProduct = () => {
                 validationSchema={validationSchema}
             >
                 {formikProps => {
-                    const {values} = formikProps;
-                    console.log(values);
+                    const { values } = formikProps;
                     return (
                         <Form className="">
                             <div>
@@ -71,7 +102,7 @@ const AddProduct = () => {
                                     <div className="mt-4 flex flex-col gap-2">
                                         <FastField
                                             label="Product name"
-                                            name="product_name"
+                                            name="name"
                                             className="border border-gray-300 flex-1 py-1 px-3 max-w-[352px] min-w-[452px]"
                                             classNameContainer="flex justify-center gap-4 mx-auto"
                                             classNameLabel="min-w-[150px] text-right mt-1"
@@ -80,7 +111,7 @@ const AddProduct = () => {
                                         ></FastField>
                                         <FastField
                                             label="Category"
-                                            name="product_category"
+                                            name="category"
                                             className="border border-gray-300 flex-1 max-w-[500px] min-w-[452px]"
                                             classNameContainer="flex justify-center gap-4 mx-auto"
                                             classNameLabel="min-w-[150px] text-right mt-1"
@@ -90,7 +121,7 @@ const AddProduct = () => {
                                         ></FastField>
                                         <FastField
                                             label="Slug"
-                                            name="product_slug"
+                                            name="slug"
                                             className="border border-gray-300 flex-1 py-1 px-3 max-w-[352px] min-w-[452px]"
                                             classNameContainer="flex justify-center gap-4 mx-auto"
                                             classNameLabel="min-w-[150px] text-right mt-1"
@@ -99,7 +130,7 @@ const AddProduct = () => {
                                         ></FastField>
                                         <FastField
                                             label="Price"
-                                            name="product_price"
+                                            name="price"
                                             className="border border-gray-300 flex-1 py-1 px-3 max-w-[352px] min-w-[452px]"
                                             classNameContainer="flex justify-center gap-4 mx-auto"
                                             classNameLabel="min-w-[150px] text-right mt-1"
@@ -108,7 +139,7 @@ const AddProduct = () => {
                                         ></FastField>
                                         <FastField
                                             label="Old price"
-                                            name="product_oldPrice"
+                                            name="oldPrice"
                                             className="border border-gray-300 flex-1 py-1 px-3 max-w-[352px] min-w-[452px]"
                                             classNameContainer="flex justify-center gap-4 mx-auto"
                                             classNameLabel="min-w-[150px] text-right mt-1"
@@ -117,7 +148,7 @@ const AddProduct = () => {
                                         ></FastField>
                                         <FastField
                                             label="Color"
-                                            name="product_color"
+                                            name="color"
                                             className="border border-gray-300 flex-1 max-w-[352px] min-w-[452px] h-[40px]"
                                             classNameContainer="flex justify-center gap-4 mx-auto"
                                             classNameLabel="min-w-[150px] text-right"
@@ -126,11 +157,11 @@ const AddProduct = () => {
                                         ></FastField>
                                         <FastField
                                             label="Image"
-                                            name="product_image"
+                                            name="imageFile"
                                             className="border border-gray-300 flex-1 py-1 px-3 max-w-[352px] min-w-[452px]"
                                             classNameContainer="flex justify-center gap-4 mx-auto"
                                             classNameLabel="min-w-[150px] text-right mt-1"
-                                            
+
                                             value={undefined}
                                             type="file"
                                             accept="image/png, image/jpeg"
@@ -139,7 +170,7 @@ const AddProduct = () => {
                                         ></FastField>
                                         <FastField
                                             label="Description"
-                                            name="product_description"
+                                            name="description"
                                             className="border border-gray-300 flex-1 px-3 py-1 max-w-[352px] min-w-[452px] min-h-[12px]"
                                             classNameContainer="flex justify-center gap-4 mx-auto"
                                             classNameLabel="min-w-[150px] text-right"

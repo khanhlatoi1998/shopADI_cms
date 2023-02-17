@@ -25,16 +25,21 @@ const InputFilesField: React.FC<Props> = ({
     const [listImage, setListImage] = useState<any>([]);
 
     const handleValuesFiles = (e: any) => {
-        const listFile = Object.values(e.currentTarget.files);
-        const listSrc: string[] = [];
+        const listFile: any = Object.values(e.currentTarget.files);
+        const listSrc: any = [];
 
         listFile.forEach((file: any) => {
             const src = URL.createObjectURL(file);
-            listSrc.push(src);
+            // Encode the file using the FileReader API
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                listSrc.push(reader.result);
+            };
+            reader.readAsDataURL(file);
             setListImage((e: any) => [...e, src])
         })
-        form.setFieldValue(name, e.currentTarget.value);
-        form.setFieldValue('AddProduct_listImage', listSrc);
+        form.setFieldValue('image', URL.createObjectURL(listFile[0]));
+        form.setFieldValue('subImage', listSrc);
     };
 
     return (

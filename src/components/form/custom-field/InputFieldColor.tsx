@@ -26,16 +26,22 @@ const InputFieldColor: React.FC<Props> = ({
     const { values, name, onChange, onBlur } = field;
     const { errors, touched } = form;
     const showError = errors[name] && touched[name];
-    const [stateListColor, setStateListColor] = useState<string[]>([]);
+    const [stateListColor, setStateListColor] = useState<any[]>([]);
 
     const addColor = (e: any) => {
         const listColor = [...stateListColor];
-        const color = e.currentTarget.value;
-        listColor.push(color);
-        setStateListColor((e) => [...e, color]);
+        const color = {
+            hex: e.currentTarget.value,
+            name: e.currentTarget.value,
+            active: false
+        };
 
-        form.setFieldValue(name, e.currentTarget.value);
-        form.setFieldValue('product_listColor', listColor);
+        listColor.push(color);
+        setStateListColor((e: any) => [...e, color]);
+
+        form.setFieldValue(name, listColor[0].hex);
+        listColor[0].active = true;
+        form.setFieldValue('color_group', listColor);
 
     };
 
@@ -58,9 +64,9 @@ const InputFieldColor: React.FC<Props> = ({
                     <p className="text-sm text-[#ff7600] min-h-[20px] ml-4 text-left">{showError && errors[name]}</p>
                     <ul className="max-w-[452px] pb-3 flex gap-3">
                         {
-                            stateListColor?.map((color: string, idx: any) => {
+                            stateListColor?.map((color: any, idx: any) => {
                                 return (
-                                    <li key={idx} style={{ backgroundColor: color }} className={`w-[40px] h-[40px]`}></li>
+                                    <li key={idx} style={{ backgroundColor: color.hex }} className={`w-[40px] h-[40px]`}></li>
                                 )
                             })
                         }

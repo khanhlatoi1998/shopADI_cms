@@ -1,0 +1,1 @@
+export const SIZE_OPTION = ['S', 'M', 'L', 'X'];
